@@ -51,14 +51,30 @@ pipeline{
     */
     stages{
         stage('pre'){
-            steps{
+            steps{       
+
+                /*
+                https://jenkins.io/doc/pipeline/steps/ws-cleanup/#cleanws-delete-workspace-when-build-is-done
+                */         
+                cleanWs()                
+                
+                /*
+                https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#dir-change-current-directory
+                */
                 dir(CHECKOUTPATH){
+                    /*
+                    https://jenkins.io/doc/pipeline/steps/git/#git-git
+                    */
                     git(                    
                         url: 'https://github.com/dhavlev/simple-java-maven-app.git',
                         branch: 'master'
                     )
                 }
+
                 script{
+                    /*
+                    https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#isunix-checks-if-running-on-a-unix-like-node
+                    */
                     if (isUnix()){
                         sh(
                             script: 'echo This is Pre Step'
@@ -86,8 +102,7 @@ pipeline{
                     }
                 }      
 
-            }
-            
+            }            
         }
     }
 
@@ -96,7 +111,7 @@ pipeline{
     */
     post{
         always{
-            echo 'I will always say Hello again!'
+            echo 'I will always say Hello again!'            
         }
     }
 }
