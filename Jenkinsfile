@@ -11,6 +11,7 @@ pipeline{
     tools{
         git 'Default'
     }
+    
 
     /*
     https://jenkins.io/doc/book/pipeline/syntax/#parameters
@@ -28,14 +29,14 @@ pipeline{
     https://jenkins.io/doc/book/pipeline/syntax/#stage-options
     */
     options{
-        buildDiscarder(logRotator(numToKeepStr: '1'))
+        buildDiscarder(logRotator(numToKeepStr: '20'))
     }
 
     /*
     https://jenkins.io/doc/book/pipeline/syntax/#environment
     */
     environment{
-        CC = 'clang'
+        CHECKOUTPATH = 'mycustompath/path'
     }
 
     /*
@@ -51,22 +52,42 @@ pipeline{
     stages{
         stage('pre'){
             steps{
-                git(                    
-                    url: 'https://github.com/dhavlev/simple-java-maven-app.git',
-                    branch: 'master'
-                )
+                dir(CHECKOUTPATH){
+                    git(                    
+                        url: 'https://github.com/dhavlev/simple-java-maven-app.git',
+                        branch: 'master'
+                    )
+                }
                 script{
                     if (isUnix()){
                         sh(
-                            script: 'echo Hello World'
+                            script: 'echo This is Pre Step'
                         )
                     } else{
                         bat(
-                            script: 'echo Hello World'
+                            script: 'echo This is Pre Step'
                         )
                     }
                 }              
             }
+        }
+
+        stage('Build'){
+            steps{
+                script{
+                    if (isUnix()){
+                        sh(
+                            script: 'echo This is Build Step'
+                        )
+                    } else{
+                        bat(
+                            script: 'echo This is Build Step'
+                        )
+                    }
+                }      
+
+            }
+            
         }
     }
 
