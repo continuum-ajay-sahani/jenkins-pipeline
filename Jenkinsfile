@@ -37,6 +37,7 @@ pipeline{
     */
     environment{
         CHECKOUTPATH = 'mycustompath/path'
+        /*ROOT = tool name: 'Go 1.8', type: 'go'*/ 
     }
 
     /*
@@ -69,6 +70,14 @@ pipeline{
                         url: 'https://github.com/dhavlev/simple-java-maven-app.git',
                         branch: 'master'
                     )
+
+                    /*https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#withenv-set-environment-variables*/
+                    /*https://stackoverflow.com/a/46608311/5975329*/
+                    /*withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]){
+                        sh(
+                            script: "go version"
+                        )
+                    }*/
                 }
 
                 script{
